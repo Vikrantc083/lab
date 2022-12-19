@@ -1,0 +1,170 @@
+//Program to find ip address
+import java.net.InetAddress;
+import java.net.UnknownHostException;
+
+public class Lab1{
+public static void main(String[] args) {
+
+    InetAddress localhost;
+    String str="";
+    try {
+        localhost = InetAddress.getLocalHost();
+        str=localhost.getHostAddress();
+    } catch (UnknownHostException e) {
+        e.printStackTrace();
+    }
+    System.out.println("The ip address of computer is: " + str); 
+}}
+
+//PRogram to find ip adress of website
+
+import java.net.InetAddress;
+import java.net.UnknownHostException;
+
+public class lab2 {
+    public static void main(String[] args) {
+        InetAddress ia=null;
+     try {
+         ia=InetAddress.getByName("www.google.com");
+    } catch (UnknownHostException e) {
+        e.printStackTrace();
+    }
+    System.out.println("The public Ip address is : "+ia);
+        
+    }
+}
+
+//Program to find ips 
+
+import java.net.InetAddress;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.UnknownHostException;
+
+public class lab3 {
+    public static void main(String args[]) throws UnknownHostException {
+        URL url=null;
+        try {
+            url = new URL("https://www.google.com");
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
+        InetAddress[] ips=InetAddress.getAllByName(url.getHost());
+        System.out.println("The ips are : ");
+        for(InetAddress i :ips){
+            System.out.println(i);
+        }
+    }
+}
+
+//Program to find class
+
+public class lab4 {
+    static String findClass(String str){
+        int index=str.indexOf(".");
+        String ipsub=str.substring(0, index);
+        int ip=Integer.parseInt(ipsub);
+        if(ip>=1&&ip<=126)
+        return "A";
+        else if(ip>=127&&ip<=191)
+        return "B";
+        else if(ip>=192&&ip<=223)
+        return "C";
+        else if(ip>=224&&ip<=239)
+        return "D";
+        else return "E";
+    }
+    public static void main(String[] args) {
+        String str=findClass("192.233.1.0");
+        System.out.println("The IP address Class is : "+str);
+    }
+}
+
+//Program to find version
+import java.net.InetAddress;
+import java.net.UnknownHostException;
+
+public class lab5 {
+    public static int findVersion(InetAddress ia){
+        byte[] address=ia.getAddress();
+        if(address.length==4) return 4;
+        else if(address.length==6) return 6;
+        else return -1;
+    }
+    public static void main(String[] args) throws UnknownHostException {
+        InetAddress ia=InetAddress.getLocalHost();
+        if(findVersion(ia)!=-1)
+        System.out.println("THE VERSION IS IPV"+findVersion(ia));
+    }
+}
+
+//Program for download
+import java.net.*;
+import java.io.*;
+public class download {
+public static void main(String[] args) {
+  
+try {
+     // Create URL object
+     URL url = new URL("https://google.com");
+     BufferedReader reader=new BufferedReader(new InputStreamReader(url.openStream()));
+     BufferedWriter writer =new BufferedWriter(new FileWriter("Downloadw.html"));
+     String line;
+     while((line=reader.readLine())!=null){
+         writer.write(line);
+     }
+     reader.close();
+     writer.close();
+     System.out.println("Successfully Downloaded");
+} catch (Exception e) {
+    // TODO: handle exception
+}}}
+
+//Program for client
+import java.io.*;
+import java.net.*;
+
+public class TCPClient {
+
+	public static void main(String[] args) 
+	throws Exception{
+		String set;
+		String  modifiedSentence;
+		BufferedReader inFromUser=
+			   new BufferedReader(new InputStreamReader(System.in));
+		Socket clientSocket=new Socket("127.0.0.1",6789);
+		DataOutputStream outToServer=new DataOutputStream(clientSocket.getOutputStream()); 
+		BufferedReader  inFromServer= new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
+		set=inFromUser.readLine();
+		outToServer.writeBytes(set + '\n');
+		modifiedSentence = inFromServer.readLine();
+		System.out.println("From Server:" + modifiedSentence);
+		clientSocket.close();
+	}
+
+}
+
+//Program for Server
+
+import java.io.*;
+import java.net.*;
+
+public class TCPServer {
+	public static void main(String argv[]) throws Exception {
+		String clientSentence;
+		String capitalizedSentence;
+		ServerSocket welcomeSocket = new ServerSocket(6789);
+		while(true) {
+			Socket connectionSocket = welcomeSocket.accept();
+			BufferedReader inFormClient = new BufferedReader(new InputStreamReader
+					(connectionSocket.getInputStream()));
+			DataOutputStream outToClient=new DataOutputStream(connectionSocket.getOutputStream()); 
+			clientSentence = inFormClient.readLine();
+			capitalizedSentence = clientSentence.toUpperCase() + '\n';
+			outToClient.writeBytes(capitalizedSentence);
+			welcomeSocket.close();
+		}
+		
+	}
+}
+
